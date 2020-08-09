@@ -1,0 +1,10 @@
+[package]
+name = "nbt"
+version = "0.1.0"
+authors = ["Jaden Buchan <me@jaden.bio>"]
+edition = "2018"
+
+[dependencies]
+flate2 = "1.0"
+bytes = "0.5"
+anyhow = "1.0"
