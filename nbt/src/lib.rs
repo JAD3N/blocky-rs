@@ -137,6 +137,10 @@ impl Payload {
     pub fn get_mut<I: Index>(&mut self, index: I) -> Option<&mut Self> {
         index.index_mut(self)
     }
+
+    pub fn insert<I: Index>(&mut self, index: I, value: Self) {
+        *index.insert(self) = value;
+    }
 }
 
 pub trait Index {
@@ -249,11 +253,15 @@ impl Tag {
     }
 
     pub fn get<I: Index>(&self, index: I) -> Option<&Payload> {
-        index.index(&self.payload)
+        self.payload.get(index)
     }
 
     pub fn get_mut<I: Index>(&mut self, index: I) -> Option<&mut Payload> {
-        index.index_mut(&mut self.payload)
+        self.payload.get_mut(index)
+    }
+
+    pub fn insert<I: Index>(&mut self, index: I, value: Payload) {
+        self.payload.insert(index, value);
     }
 
     fn decode_payload<T: Buf>(buf: &mut T, id: u8) -> anyhow::Result<Payload> {
