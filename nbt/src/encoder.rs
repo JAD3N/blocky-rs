@@ -5,6 +5,8 @@ use bytes::{BytesMut, BufMut};
 use std::io::Write;
 
 fn encode_tag(buf: &mut BytesMut, tag: &Tag) -> anyhow::Result<()> {
+    let kind = tag.kind();
+
     match tag {
         Tag::End => panic!("cannot encode null"),
 
@@ -43,11 +45,15 @@ fn encode_tag(buf: &mut BytesMut, tag: &Tag) -> anyhow::Result<()> {
             buf.put_slice(value);
         },
 
-        Tag::List(nbt_id, v) => {
+        Tag::List(v) => {
             let len = v.len() as i32;
+            let tag_id = match kind {
+                Kind::List(tag_id) => tag_id,
+                _ => anyhow::bail!("kind doesn't match tag"),
+            };
 
             buf.reserve(5);
-            buf.put_u8(*nbt_id);
+            buf.put_u8(tag_id);
             buf.put_i32(len);
 
             for tag in v {

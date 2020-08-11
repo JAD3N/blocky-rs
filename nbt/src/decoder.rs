@@ -1,7 +1,6 @@
-use crate::{Nbt, Tag};
+use crate::{Nbt, Tag, Map};
 use flate2::read::GzDecoder;
 use bytes::{Bytes, Buf};
-use linked_hash_map::LinkedHashMap;
 use std::io::Read;
 use std::str;
 
@@ -32,19 +31,19 @@ fn decode_tag(buf: &mut Bytes, id: u8) -> anyhow::Result<Tag> {
         },
 
         9 => {
-            let nbt_id = buf.get_u8();
+            let tag_id = buf.get_u8();
             let len = buf.get_i32();
             let mut v = vec![];
 
             for _ in 0..len {
-                v.push(decode_tag(buf, nbt_id)?);
+                v.push(decode_tag(buf, tag_id)?);
             }
 
-            Ok(Tag::List(nbt_id, v))
+            Ok(Tag::List(v))
         },
 
         10 => {
-            let mut m = LinkedHashMap::new();
+            let mut m = Map::new();
 
             loop {
                 let nbt = decode_nbt(buf)?;

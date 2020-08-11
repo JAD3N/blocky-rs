@@ -51,21 +51,21 @@ impl Index for String {
 impl Index for usize {
     fn index_into<'a>(&self, tag: &'a Tag) -> Option<&'a Tag> {
         match tag {
-            Tag::List(_, v) => v.get(*self),
+            Tag::List(v) => v.get(*self),
             _ => None,
         }
     }
 
     fn index_into_mut<'a>(&self, tag: &'a mut Tag) -> Option<&'a mut Tag> {
         match tag {
-            Tag::List(_, v) => v.get_mut(*self),
+            Tag::List(v) => v.get_mut(*self),
             _ => None,
         }
     }
 
     fn index_or_insert<'a>(&self, tag: &'a mut Tag) -> &'a mut Tag {
         match tag {
-            Tag::List(_, v) => {
+            Tag::List(v) => {
                 let len = v.len();
 
                 v.get_mut(*self)

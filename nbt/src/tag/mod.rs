@@ -6,8 +6,12 @@ pub use kind::*;
 pub use index::*;
 pub use parser::*;
 
+#[cfg(feature = "preserve-order")]
+pub use indexmap::IndexMap as Map;
+#[cfg(not(feature = "preserve-order"))]
+pub use std::collections::HashMap as Map;
+
 use regex::Regex;
-use linked_hash_map::LinkedHashMap;
 use std::fmt;
 
 lazy_static! {
@@ -25,8 +29,8 @@ pub enum Tag {
     Double(f64),
     ByteArray(Vec<i8>),
     String(String),
-    List(u8, Vec<Self>),
-    Compound(LinkedHashMap<String, Tag>),
+    List(Vec<Self>),
+    Compound(Map<String, Self>),
     IntArray(Vec<i32>),
     LongArray(Vec<i64>),
 }
@@ -93,7 +97,11 @@ impl Tag {
             Self::Double(_) => Kind::Double,
             Self::ByteArray(_) => Kind::ByteArray,
             Self::String(_) => Kind::String,
-            Self::List(id, _) => Kind::List(*id),
+            Self::List(v) => Kind::List(
+                v.get(0)
+                    .map(|tag| tag.kind().id())
+                    .unwrap_or(Kind::End.id()),
+            ),
             Self::Compound(_) => Kind::Compound,
             Self::IntArray(_) => Kind::IntArray,
             Self::LongArray(_) => Kind::LongArray,
@@ -155,7 +163,7 @@ impl fmt::Display for Tag {
 
             Self::String(s) => quote_and_escape(&s),
 
-            Self::List(_, v) => {
+            Self::List(v) => {
                 let mut items = vec![];
 
                 for tag in v {

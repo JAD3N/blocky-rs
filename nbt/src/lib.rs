@@ -101,6 +101,7 @@ mod tests {
         nbt(include_bytes!("../examples/compressed.nbt"));
     }
 
+    #[cfg(feature = "preserve-order")]
     #[test]
     fn insertion_order() {
         let bytes = include_bytes!("../examples/uncompressed.nbt");

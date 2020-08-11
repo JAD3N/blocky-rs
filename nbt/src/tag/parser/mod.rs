@@ -2,9 +2,8 @@ mod reader;
 
 use reader::*;
 
-use crate::{Tag, Nbt, Kind};
+use crate::{Tag, Nbt, Kind, Map};
 use regex::Regex;
-use linked_hash_map::LinkedHashMap;
 
 lazy_static! {
     static ref DOUBLE_PATTERN_NOSUFFIX: Regex = Regex::new("^(?i)[-+]?(?:[0-9]+[.]|[0-9]*[.][0-9]+)(?:e[-+]?[0-9]+)?$").unwrap();
@@ -152,7 +151,7 @@ impl Parser {
         self.expect('{')?;
         self.reader.skip_whitespace()?;
 
-        let mut m = LinkedHashMap::new();
+        let mut m = Map::new();
 
         while self.reader.peek()? != '}' {
             let start = self.reader.position();
@@ -245,7 +244,7 @@ impl Parser {
         }
 
         self.expect(']')?;
-        Ok(Tag::List(kind.id(), v))
+        Ok(Tag::List(v))
     }
 
     pub fn read_list(&mut self) -> anyhow::Result<Tag> {
