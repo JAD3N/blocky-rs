@@ -1,8 +1,15 @@
 [package]
-name = "nbt"
+name = "blocky-nbt"
 version = "0.1.0"
 authors = ["Jaden Buchan <me@jaden.bio>"]
 edition = "2018"
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/jad3n/blocky-rs"
+documentation = "https://docs.rs/blocky-nbt/0.1.0"
+description = """
+Utilities for working with Minecraft NBT data.
+"""
 
 [features]
 default = ["preserve-order"]

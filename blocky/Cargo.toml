@@ -1,0 +1,14 @@
+[package]
+name = "blocky"
+version = "0.1.0"
+authors = ["Jaden Buchan <me@jaden.bio>"]
+edition = "2018"
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/jad3n/blocky-rs"
+documentation = "https://docs.rs/blocky/0.1.0"
+description = """
+This crate is designed to be a placeholder for now.
+"""
+
+[dependencies]

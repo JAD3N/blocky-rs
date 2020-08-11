@@ -1,4 +1,5 @@
 [workspace]
 members = [
-    "nbt",
+    "blocky",
+    "blocky-nbt",
 ]
