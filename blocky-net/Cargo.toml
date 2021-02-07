@@ -1,0 +1,15 @@
+[package]
+name = "blocky-net"
+version = "0.1.0"
+authors = ["Jaden Buchan <me@jaden.bio>"]
+edition = "2018"
+license = "MIT"
+readme = "../README.md"
+repository = "https://github.com/jad3n/blocky-rs"
+documentation = "https://docs.rs/blocky-net/0.1.0"
+description = """
+Networking utils for a Minecraft server
+"""
+
+[dependencies]
+blocky = { path = "../blocky" }

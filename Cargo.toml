@@ -2,4 +2,5 @@
 members = [
     "blocky",
     "blocky-nbt",
+    "blocky-net",
 ]
