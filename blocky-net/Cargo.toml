@@ -12,4 +12,4 @@ Networking utils for a Minecraft server
 """
 
 [dependencies]
-blocky = { version = "0.1.0", path = "../blocky" }
+blocky = { version = "0.1.1", path = "../blocky" }
