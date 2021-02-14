@@ -9,6 +9,7 @@ pub struct Style {
     strikethrough: Option<bool>,
     obfuscated: Option<bool>,
     click_event: Option<ClickEvent>,
+    // TODO: hover_event: Option<HoverEVent>,
 }
 
 impl Default for Style {
@@ -21,6 +22,7 @@ impl Default for Style {
             strikethrough: None,
             obfuscated: None,
             click_event: None,
+            // hover_event: None,
         }
     }
 }

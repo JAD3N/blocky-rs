@@ -11,6 +11,9 @@ pub trait ComponentContent {
 pub trait Component: ComponentContent + ComponentClone {
     fn siblings(&self) -> &Vec<Box<dyn Component>> where Self: Sized;
     fn siblings_mut(&mut self) -> &mut Vec<Box<dyn Component>> where Self: Sized;
+
+    fn style(&self) -> &Style;
+    fn style_mut(&mut self) -> &mut Style;
 }
 
 #[macro_export]
@@ -29,6 +32,14 @@ macro_rules! component {
 
             fn siblings_mut(&mut self) -> &mut Vec<Box<dyn Component>> {
                 self.siblings.as_mut()
+            }
+
+            fn style(&self) -> &Style {
+                &self.style
+            }
+
+            fn style_mut(&mut self) -> &mut Style {
+                &mut self.style
             }
         }
     };
