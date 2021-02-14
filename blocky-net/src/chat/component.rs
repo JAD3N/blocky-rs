@@ -12,6 +12,10 @@ pub trait Component: ComponentContent + ComponentClone {
     fn siblings(&self) -> &Vec<Box<dyn Component>> where Self: Sized;
     fn siblings_mut(&mut self) -> &mut Vec<Box<dyn Component>> where Self: Sized;
 
+    fn append(&mut self, component: Box<dyn Component>) where Self: Sized {
+        self.siblings_mut().push(component);
+    }
+
     fn style(&self) -> &Style;
     fn style_mut(&mut self) -> &mut Style;
 }
@@ -46,7 +50,7 @@ macro_rules! component {
 }
 
 component!(pub struct TextComponent {
-    test: u8,
+    text: String,
 });
 
 impl ComponentContent for TextComponent {}
@@ -56,7 +60,7 @@ impl ComponentClone for TextComponent {
         Box::new(Self {
             siblings: vec![],
             style: Style::default(),
-            test: self.test,
+            text: self.text.clone(),
         })
     }
 }
