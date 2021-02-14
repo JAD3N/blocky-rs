@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "blocky",
+    "blocky-core",
     "blocky-nbt",
     "blocky-net",
 ]

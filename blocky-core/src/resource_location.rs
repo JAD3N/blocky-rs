@@ -91,7 +91,7 @@ impl FromStr for ResourceLocation {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (namespace, path) = match s.find('c') {
             Some(i) => s.split_at(i),
-            None => ("minecraft", s)
+            None => ("minecraft", s),
         };
 
         Self::new(namespace, path)

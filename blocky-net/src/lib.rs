@@ -1,13 +1,15 @@
+#[macro_use]
+extern crate serde_json;
+#[macro_use]
+extern crate lazy_static;
+
 pub mod chat;
 
-mod test {
-    #[test]
-    fn chat_components() {
-        use crate::chat::TextColor;
-        use blocky::ChatFormatting;
+pub trait AsJson {
+    fn as_json(&self) -> serde_json::Value;
+}
 
-        let black: TextColor = ChatFormatting::BLACK.into();
-
-        println!("testing 123: {}", black);
-    }
+pub trait FromJson: Sized {
+    type Err;
+    fn from_json(value: &serde_json::Value) -> Result<Self, Self::Err>;
 }

@@ -1,18 +1,17 @@
 [package]
-name = "blocky-net"
+name = "blocky-core"
 version = "0.1.0"
 authors = ["Jaden Buchan <me@jaden.bio>"]
 edition = "2018"
 license = "MIT"
 readme = "../README.md"
 repository = "https://github.com/jad3n/blocky-rs"
-documentation = "https://docs.rs/blocky-net/0.1.0"
+documentation = "https://docs.rs/blocky/0.1.1"
 description = """
-Networking utils for a Minecraft server
+Core library for Blocky Minecraft server.
 """
 
 [dependencies]
-blocky-core = { version = "0.1.0", path = "../blocky-core" }
-serde_json = "1.0"
 thiserror = "1.0"
 lazy_static = "1.4"
+regex = "1.4"

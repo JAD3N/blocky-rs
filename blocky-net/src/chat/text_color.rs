@@ -1,5 +1,6 @@
 use std::fmt;
-use blocky::ChatFormatting;
+use std::collections::HashMap;
+use blocky_core::ChatFormatting;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct TextColor {
@@ -7,17 +8,42 @@ pub struct TextColor {
     name: Option<String>,
 }
 
+lazy_static! {
+    static ref NAMED_COLORS: HashMap<String, TextColor> = {
+        let mut m = HashMap::new();
+
+        for &format in &ChatFormatting::VALUES {
+            if format.is_color() {
+                m.insert(format.name().to_string(), format.into());
+            }
+        }
+
+        m
+    };
+}
+
 impl TextColor {
     pub fn new(value: u32, name: Option<String>) -> Self {
         Self { value, name }
     }
 
-    pub fn new_with_empty_name(value: u32) -> Self {
+    pub fn from_color(value: u32) -> Self {
         Self::new(value, None)
     }
 
     pub fn format_value(&self) -> String {
         format!("#{:06X}", self.value)
+    }
+
+    pub fn parse(s: &str) -> Option<TextColor> {
+        if s.starts_with("#") {
+            // try hex parse string into u32
+            let color = u32::from_str_radix(&s[1..], 16).ok()?;
+            Some(TextColor::from_color(color))
+        } else {
+            // clone named color if found
+            NAMED_COLORS.get(s).and_then(|color| Some(color.clone()))
+        }
     }
 }
 
@@ -30,7 +56,7 @@ impl fmt::Display for TextColor {
     }
 }
 
-impl Into<TextColor> for ChatFormatting {
+impl Into<TextColor> for &ChatFormatting {
     fn into(self) -> TextColor {
         if self.is_color() {
             TextColor::new(
