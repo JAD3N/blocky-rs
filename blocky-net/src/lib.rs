@@ -9,7 +9,7 @@ pub trait AsJson {
     fn as_json(&self) -> serde_json::Value;
 }
 
-pub trait FromJson: Sized {
+pub trait FromJson {
     type Err;
-    fn from_json(value: &serde_json::Value) -> Result<Self, Self::Err>;
+    fn from_json(value: &serde_json::Value) -> Result<Self, Self::Err> where Self: Sized;
 }
