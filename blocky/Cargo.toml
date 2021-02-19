@@ -21,3 +21,5 @@ blocky-core = { version = "0.1.0", path = "../blocky-core" }
 blocky-nbt = { version = "0.1.0", path = "../blocky-nbt" }
 blocky-net = { version = "0.1.0", path = "../blocky-net" }
 serde_json = "1.0"
+clap = "2.33"
+java-props = "0.1"
