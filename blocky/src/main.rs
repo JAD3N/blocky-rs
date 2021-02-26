@@ -2,7 +2,8 @@
 extern crate clap;
 
 use java_props::Properties;
-use blocky::net::AsJson;
+use blocky::net::{AsJson, FromJson};
+use blocky::net::protocol::{ProtocolWrite, Test};
 use blocky::net::chat::{Style, ClickEvent, ClickAction, TextColor, TextComponent, Component};
 
 fn main() {
@@ -25,14 +26,7 @@ fn main() {
         (@arg serverId: --serverId +takes_value)
     ).get_matches();
 
-    println!("{:?}", matches);
-
-    let mut component = TextComponent::new("this is a test!");
-    component.style_mut().bold = Some(true);
-    component.style_mut().click_event = Some(ClickEvent::new(
-        ClickAction::OpenUrl,
-        "this is a test!",
-    ));
-
-    println!("json: {}", component.as_json());
+    let test = Test {
+        text: TextComponent::new("this is a fun test!"),
+    };
 }

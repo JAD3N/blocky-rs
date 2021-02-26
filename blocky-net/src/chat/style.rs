@@ -1,6 +1,18 @@
-use crate::AsJson;
-use super::{TextColor, ClickEvent};
+use std::str::FromStr;
 use blocky_core::ResourceLocation;
+use thiserror::Error;
+use crate::{AsJson, FromJson};
+use super::{ClickEvent, TextColor};
+
+#[derive(Error, Debug)]
+pub enum StyleError {
+    #[error("invalid type for: {0}")]
+    InvalidType(String),
+    #[error("invalid color: {0}")]
+    InvalidColor(String),
+    #[error("failed to parse style")]
+    Parse,
+}
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Style {
@@ -99,5 +111,93 @@ impl AsJson for Style {
 
             obj
         }
+    }
+}
+
+impl FromJson for Style {
+    type Err = StyleError;
+
+    fn from_json(value: &serde_json::Value) -> Result<Self, Self::Err> {
+        let mut style = Style::default();
+
+        if let Some(color) = value.get("color") {
+            let color = color
+                .as_str()
+                .ok_or(StyleError::InvalidType(String::from("color")))?;
+
+            if let Some(color) = TextColor::parse(color) {
+                style.color = Some(color);
+            } else {
+                return Err(StyleError::InvalidColor(color.into()));
+            }
+        }
+
+        if let Some(bold) = value.get("bold") {
+            let bold = bold
+                .as_bool()
+                .ok_or(StyleError::InvalidType(String::from("bold")))?;
+
+            style.bold = Some(bold);
+        }
+
+        if let Some(italic) = value.get("italic") {
+            let italic = italic
+                .as_bool()
+                .ok_or(StyleError::InvalidType(String::from("italic")))?;
+
+            style.italic = Some(italic);
+        }
+
+        if let Some(underlined) = value.get("underlined") {
+            let underlined = underlined
+                .as_bool()
+                .ok_or(StyleError::InvalidType(String::from("underlined")))?;
+
+            style.underlined = Some(underlined);
+        }
+
+        if let Some(strikethrough) = value.get("strikethrough") {
+            let strikethrough = strikethrough
+                .as_bool()
+                .ok_or(StyleError::InvalidType(String::from("strikethrough")))?;
+
+            style.strikethrough = Some(strikethrough);
+        }
+
+        if let Some(obfuscated) = value.get("obfuscated") {
+            let obfuscated = obfuscated
+                .as_bool()
+                .ok_or(StyleError::InvalidType(String::from("obfuscated")))?;
+
+            style.obfuscated = Some(obfuscated);
+        }
+
+        if let Some(click_event) = value.get("clickEvent") {
+            let click_event = ClickEvent::from_json(click_event)
+                .or(Err(StyleError::Parse))?;
+
+            style.click_event = Some(click_event);
+        }
+
+        if let Some(insertion) = value.get("insertion") {
+            let insertion = insertion
+                .as_str()
+                .ok_or(StyleError::InvalidType(String::from("insertion")))?;
+
+            style.insertion = Some(insertion.into());
+        }
+
+        if let Some(font) = value.get("font") {
+            let font = font
+                .as_str()
+                .ok_or(StyleError::InvalidType(String::from("font")))?;
+
+            let loc = ResourceLocation::from_str(font)
+                .or(Err(StyleError::Parse))?;
+
+            style.font = Some(loc);
+        }
+
+        Ok(style)
     }
 }

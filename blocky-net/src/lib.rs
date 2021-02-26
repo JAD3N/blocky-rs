@@ -1,9 +1,17 @@
 #[macro_use]
+extern crate mopa;
+#[macro_use]
 extern crate serde_json;
 #[macro_use]
 extern crate lazy_static;
 
+trait Test: Sized {
+    fn test(&self) -> Vec<Box<Self>>;
+}
+
 pub mod chat;
+#[macro_use]
+pub mod protocol;
 
 pub trait AsJson {
     fn as_json(&self) -> serde_json::Value;
